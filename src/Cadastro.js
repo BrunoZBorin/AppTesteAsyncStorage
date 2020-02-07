@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   StyleSheet,
@@ -7,7 +8,7 @@ import {
   TextInput,
   Button,
   Picker,
-  Image,
+  Alert,
   KeyboardAvoidingView,
   ScrollView
 } from 'react-native';
@@ -33,12 +34,20 @@ class Cadastro extends Component {
   Next=()=>{
     this.props.navigation.navigate('Perfil')
   }
- 
-
-  render(){
- 
-
-  return (
+  storeLogin = async()=> {
+    const userNome = this.state.nome
+    try {
+      await AsyncStorage.setItem('userNome', userNome);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+    
+    this.props.navigation.navigate('Perfil')
+    
+  };
+  
+ render(){
+ return (
     <View style={styles.container}>
       <View style={styles.view}>
       <KeyboardAvoidingView>
@@ -127,7 +136,7 @@ class Cadastro extends Component {
             <Picker.Item label="Ação" value="acao" />
         </Picker>
         
-        <Button onPress={()=>this.Next()}
+        <Button onPress={()=>this.storeLogin()}
           title={'Visualizar Perfil'}/>
       </ScrollView>
       </KeyboardAvoidingView>

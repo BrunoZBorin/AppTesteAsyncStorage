@@ -6,6 +6,7 @@ import Login from './src/Login'
 import Kanban from './src/Kanban'
 import Cadastro from './src/Cadastro'
 import Perfil from './src/Perfil'
+import Kanbolas from './src/Kanbolas'
 
 function HomeScreen({ navigation }) {
   return (
@@ -14,7 +15,19 @@ function HomeScreen({ navigation }) {
       <Button
       title="Go to Login"
       onPress={() => navigation.navigate('Login')}
-    />
+      />
+      <Button
+      title="Go to Cadastro"
+      onPress={() => navigation.navigate('Cadastro')}
+      />
+      <Button
+      title="Go to Kanban"
+      onPress={() => navigation.navigate('Kanban')}
+      />
+      <Button
+      title="Go to Kanbolas"
+      onPress={() => navigation.navigate('Kanbolas')}
+      />
     </View>
   );
 }
@@ -30,6 +43,7 @@ function App() {
         <Stack.Screen name="Kanban" component={Kanban} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
         <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="Kanbolas" component={Kanbolas} />
       </Stack.Navigator>
     </NavigationContainer>
   );

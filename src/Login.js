@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 
@@ -7,7 +8,8 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
   } from 'react-native';
 
 
@@ -24,6 +26,18 @@ class App extends Component {
     saldo:null,
     data:null
   }
+  getNome = async () =>{
+    let userId =[]
+    userId = await AsyncStorage.getItem('userNome')
+    if(userId===this.state.nome){
+      Alert.alert('Funcionou')
+      this.props.navigation.replace('Kanban')
+    }else{
+      Alert.alert('Tente novamente')
+    }
+    console.log(userId)
+  }  
+  
   
   
   render(){
@@ -33,8 +47,8 @@ class App extends Component {
           <Text style={styles.title}>Digite seu email</Text>
           <TextInput
             placeholder={'E-mail'}
-            onChangeText={email=>this.setState({email})}
-            value={this.state.email}
+            onChangeText={nome=>this.setState({nome})}
+            value={this.state.nome}
             style={{height:50, color:'white', borderBottomWidth: 1,
             borderBottomColor: 'white',
             fontSize: 15,width:200
@@ -49,7 +63,7 @@ class App extends Component {
             borderBottomColor: 'white',
             fontSize: 15,width:200
             }}
-          /><TouchableOpacity onPress={()=>this.props.navigation.replace('Cadastro')}>
+          /><TouchableOpacity onPress={()=>this.getNome()}>
               <Text style={styles.texto}>Login</Text>
             </TouchableOpacity>
         

@@ -6,13 +6,8 @@ import {
   FlatList,
   PanResponder,
   PanResponderInstance,
-  TouchableOpacity,
-  Animated,
-  TextInput,
-  Button
+  Animated
 } from "react-native";
-
-import Modal from 'react-native-modal';
 
 function getRandomColor() {
   var letters = "0123456789ABCDEF";
@@ -22,7 +17,6 @@ function getRandomColor() {
   }
   return color;
 }
-
 
 function immutableMove(arr, from, to) {
   return arr.reduce((prev, current, idx, self) => {
@@ -47,31 +41,8 @@ function immutableMove(arr, from, to) {
 
 const colorMap = {};
 
-export default class Kanball extends React.Component {
+export default class App extends React.Component {
   
-  _renderButton = (text, onPress) => (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.button}>
-        <Text>{text}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-  _renderModalContent = () => (
-    <View style={styles.modalContent}>
-      <Text>Nome</Text>
-        <TextInput 
-            placeholder='Nome'
-            autoFocus={true}
-            onChangeText={data => this.setState({ textInput_Holder: data })}
-        />
-         <TouchableOpacity onPress={this.joinData } activeOpacity={0.7} style={styles.button} >
- 
-          <Text> Adicionar itens na lista </Text>
- 
-        </TouchableOpacity>
-        {this._renderButton('Fechar', () => this.setState({ visibleModal: null }))}
-    </View>
-  );
 
   _panResponder: PanResponderInstance;
   point = new Animated.ValueXY();
@@ -84,21 +55,15 @@ export default class Kanball extends React.Component {
 
   constructor(props) {
     super(props)
-    this.array = [{
-      title:'Início'
-    }
-    ],
-      this.state = {
-      dragging: false,
-      draggingIdx: -1,
-      visibleModal: null,
-      data: Array.from(Array(this.array.length), (_, i) => {
+    this.state = {
+    dragging: false,
+    draggingIdx: -1,
+    data: Array.from(Array(20), (_, i) => {
       colorMap[i] = getRandomColor();
       return i;
     })
-   }
-  
-    
+  }
+
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -144,23 +109,6 @@ export default class Kanball extends React.Component {
         return true;
       }
     });
-  }
-
-componentDidMount() {
- 
-    this.setState({ arrayHolder: [...this.array] })
- 
-  }
-  joinData = () => {
-      this.array.push({title : this.state.textInput_Holder})  
-    this.setState({ arrayHolder: [...this.array] })
-    this.setState({ visibleModal: null })
-
-  }
-  GetItem(item) {
-
-    Alert.alert(item);
-
   }
 
   animateList = () => {
@@ -222,22 +170,16 @@ componentDidMount() {
         }}
       >
         <View {...(noPanResponder ? {} : this._panResponder.panHandlers)}>
-          <Text style={{ fontSize: 28,padding:20 }}>*</Text>
+          <Text style={{ fontSize: 28, padding:20}}>*</Text>
         </View>
         <Text style={{ fontSize: 22, textAlign: "center", flex: 1 }}>
-          {item.title}
+          {item}
         </Text>
       </View>
     );
 
     return (
       <View style={styles.container}>
-      {this._renderButton('Adicionar Cards', () => this.setState({ visibleModal: 1 }))}
-        <Modal 
-         isVisible={this.state.visibleModal === 1}>
-          {this._renderModalContent()}
-        </Modal>
-
         {dragging && (
           <Animated.View
             style={{
@@ -254,8 +196,7 @@ componentDidMount() {
         <FlatList
           scrollEnabled={!dragging}
           style={{ width: "100%" }}
-          data={this.state.arrayHolder}
-          extraData={this.state.arrayHolder}  
+          data={data}
           renderItem={renderItem}
           onScroll={e => {
             this.scrollOffset = e.nativeEvent.contentOffset.y;
@@ -277,29 +218,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
-  },
-  box:{
-      marginTop:20
-  },
-  button: {
-    backgroundColor: 'lightblue',
-    padding: 12,
-    margin: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  bottomModal: {
-    justifyContent: 'flex-end',
-    margin: 0,
   }
 });
